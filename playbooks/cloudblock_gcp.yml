@@ -254,6 +254,7 @@
           DNS1: "{{ docker_doh }}"
           DNS2: "{{ docker_doh }}"
           WEBPASSWORD: "{{ ph_secret.json.payload.data | b64decode }}"
+          FTLCONF_database_maxDBdays: "7"
         image: pihole/pihole:latest
         networks:
           - name: cloudblock
@@ -263,6 +264,10 @@
           - /opt/pihole/dnsmasq.d:/etc/dnsmasq.d:rw
         pull: true
         restart_policy: "always"
+        log_driver: json-file
+        log_options:
+          max-size: "10m"
+          max-file: "3"
       when: dns_novpn == "0"
       no_log: true
 
@@ -274,6 +279,7 @@
           DNS1: "{{ docker_doh }}"
           DNS2: "{{ docker_doh }}"
           WEBPASSWORD: "{{ ph_secret.json.payload.data | b64decode }}"
+          FTLCONF_database_maxDBdays: "7"
           DNSMASQ_USER: root
         image: pihole/pihole:latest
         networks:
@@ -287,6 +293,10 @@
           - /opt/pihole/dnsmasq.d:/etc/dnsmasq.d:rw
         pull: true
         restart_policy: "always"
+        log_driver: json-file
+        log_options:
+          max-size: "10m"
+          max-file: "3"
       when: dns_novpn == "1"
       no_log: true
 

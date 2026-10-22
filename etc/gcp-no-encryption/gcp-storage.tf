@@ -7,7 +7,10 @@ resource "google_storage_bucket" "ph-bucket" {
   location                          = var.gcp_region
   project                           = google_project.ph-project.project_id
   versioning {
-    enabled                           = true
+    enabled                           = false
+  }
+  soft_delete_policy {
+    retention_duration_seconds = 0
   }
   force_destroy                     = true
 }

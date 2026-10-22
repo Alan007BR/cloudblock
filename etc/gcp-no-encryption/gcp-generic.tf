@@ -20,9 +20,9 @@ variable "ssh_user" {
   description              = "The user to associate with the SSH key. Default: ubuntu"
 }
 
-variable "ssh_key" {
+variable "ssh_key_path" {
   type                     = string
-  description              = "A public SSH key to associate with var.ssh_user, for SSH access to the instance."
+  description              = "Path to a public SSH key file for SSH access to the instance."
 }
 
 variable "mgmt_cidr" {
@@ -81,9 +81,9 @@ variable "gcp_image_project" {
   description              = "Project name where the image resides."
 }
 
-variable "gcp_image_name" {
+variable "gcp_image_family" {
   type                     = string
-  description              = "The name of the Ubuntu (18.04 tested) image."
+  description              = "The Ubuntu image family to use for the VM."
 }
 
 variable "gcp_machine_type" {

@@ -1,6 +1,6 @@
 data "google_compute_image" "ph-gcp-image" {
   project                           = var.gcp_image_project
-  name                              = var.gcp_image_name
+  family                            = var.gcp_image_family
 }
 
 resource "google_compute_address" "ph-public-ip" {
@@ -13,7 +13,8 @@ resource "google_compute_address" "ph-public-ip" {
 }
 
 locals {
-  ssh_key_formatted                 = length(split(" ", var.ssh_key)) == 3 ? var.ssh_key : "${var.ssh_key} ubuntu"
+  ssh_key                           = trimspace(file(pathexpand(var.ssh_key_path)))
+  ssh_key_formatted                 = length(split(" ", local.ssh_key)) == 3 ? local.ssh_key : "${local.ssh_key} ubuntu"
 }
 
 resource "google_compute_instance" "ph-instance" {
@@ -29,6 +30,7 @@ resource "google_compute_instance" "ph-instance" {
     initialize_params {
       image                             = data.google_compute_image.ph-gcp-image.self_link
       type                              = "pd-standard"
+      size                              = 30
     }
   }
   network_interface {

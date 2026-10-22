@@ -10,7 +10,10 @@ resource "google_storage_bucket" "ph-bucket" {
     default_kms_key_name = google_kms_crypto_key.ph-key-storage.id
   }
   versioning {
-    enabled = true
+    enabled = false
+  }
+  soft_delete_policy {
+    retention_duration_seconds = 0
   }
   depends_on    = [google_kms_crypto_key_iam_binding.ph-key-storage-binding]
   force_destroy = true
