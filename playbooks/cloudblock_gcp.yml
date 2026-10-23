@@ -285,6 +285,7 @@
           DNS2: "{{ docker_doh }}"
           WEBPASSWORD: "{{ ph_secret.json.payload.data | b64decode }}"
           FTLCONF_database_maxDBdays: "7"
+          FTLCONF_dns_listeningMode: "ALL"
           DNSMASQ_USER: root
         image: pihole/pihole:latest
         networks:
