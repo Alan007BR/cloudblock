@@ -127,6 +127,7 @@
           Metadata-Flavor: Google
         return_content: yes
       register: gcs_token_resp
+      no_log: true
 
     - name: Get pihole secret from google secret manager
       uri:
@@ -139,6 +140,7 @@
           Content-Type: application/json
           x-goog-user-project: "{{ gcp_project_prefix }}-project-{{ gcp_project_suffix }}"
       register: ph_secret
+      no_log: true
 
     - name: Get wireguard backup from storage if exists
       get_url:
@@ -151,6 +153,7 @@
         headers:
           Authorization: Bearer {{ gcs_token_resp.json.access_token }}
       ignore_errors: true
+      no_log: true
 
     - name: Determine wireguard state
       ansible.builtin.stat:
@@ -178,6 +181,7 @@
         headers:
           Authorization: Bearer {{ gcs_token_resp.json.access_token }}
       ignore_errors: true
+      no_log: true
 
     - name: Determine pihole directory state
       ansible.builtin.stat:
@@ -376,6 +380,7 @@
           Content-Type: text/plain
       with_items:
         - "{{ peer_count }}"
+      no_log: true
 
     - name: Upload wireguard to google bucket - privatekey
       uri:
@@ -390,6 +395,7 @@
           Content-Type: text/plain
       with_items:
         - "{{ peer_count }}"
+      no_log: true
 
     - name: Upload wireguard to google bucket - conf
       uri:
@@ -404,6 +410,7 @@
           Content-Type: text/plain
       with_items:
         - "{{ peer_count }}"
+      no_log: true
 
     - name: Upload wireguard to google bucket - png
       uri:
@@ -418,6 +425,7 @@
           Content-Type: image/png
       with_items:
         - "{{ peer_count }}"
+      no_log: true
 
     - name: Archive wireguard
       community.general.archive:
@@ -439,6 +447,7 @@
         headers:
           Authorization: Bearer {{ gcs_token_resp.json.access_token }}
           Content-Type: application/gzip
+      no_log: true
 
     - name: Pihole to backup playbook clear
       ansible.builtin.file:
@@ -477,6 +486,7 @@
         - "          Metadata-Flavor: Google"
         - "        return_content: yes"
         - "      register: gcs_token_response"
+        - "      no_log: true"
         - "    "
         - "    - name: Upload pihole backup archive"
         - "      uri: "
@@ -489,6 +499,7 @@
         - "        headers: "
         - "          Authorization: Bearer {{ '{{' }} gcs_token_response.json.access_token {{ '}}' }}"
         - "          Content-Type: application/gzip"
+        - "      no_log: true"
 
     - name: Pihole to backup timer
       ansible.builtin.blockinfile:
